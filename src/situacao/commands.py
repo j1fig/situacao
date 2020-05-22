@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-import argparse
 import datetime
 import os
 
@@ -18,17 +16,18 @@ def _report_filename(date):
 def _crawl():
     r = requests.get(settings.URL)
     s = BeautifulSoup(r.content, "html.parser")
-    anchors = [a for a in s.find_all('a') if a.text.startswith(settings.LINK_TEXT_PREFIX)]
+    anchors = [
+        a for a in s.find_all("a") if a.text.startswith(settings.LINK_TEXT_PREFIX)
+    ]
     reports = {}
     for a in anchors:
-        day, month, year = [int(t) for t in a.text.split(' | ')[-1].split('/')]
+        day, month, year = [int(t) for t in a.text.split(" | ")[-1].split("/")]
         if year == 2:
             year = 2020  # fixes 29th of April.
-        url = a.get('href')
+        url = a.get("href")
         date = datetime.date(year, month, day)
         if date < max(
-            settings.FIRST_REPORT_WITH_MUNICIPAL_DATA,
-            settings.FIRST_SUPPORTED_REPORT
+            settings.FIRST_REPORT_WITH_MUNICIPAL_DATA, settings.FIRST_SUPPORTED_REPORT
         ):
             # there have been multiple versions prior to the 24th of March
             # but we really only care from that onwards as there is more data
@@ -44,7 +43,7 @@ def _maybe_fetch(reports):
         report_path = _report_filename(d)
         if os.path.exists(report_path):
             continue
-        with open(report_path, 'wb') as f:
+        with open(report_path, "wb") as f:
             r = requests.get(url)
             f.write(r.content)
             fetched += 1
@@ -54,8 +53,8 @@ def _maybe_fetch(reports):
 def _extract_text(reports):
     text = {}
     for d in reports:
-        p  = _report_filename(d)
-        with open(p, 'rb') as f:
+        p = _report_filename(d)
+        with open(p, "rb") as f:
             pdf = pdftotext.PDF(f, raw=True)
             try:
                 text[d] = pdf[2]
@@ -64,14 +63,24 @@ def _extract_text(reports):
     return text
 
 
-if __name__ == "__main__":
+def command_concelho(args):
     reports = _crawl()
-    print(f'found {len(reports)} interesting reports.')
+    print(f"found {len(reports)} interesting reports.")
     fetched = _maybe_fetch(reports)
     if fetched:
-        print(f'fetched {fetched} missing reports.')
+        print(f"fetched {fetched} missing reports.")
     text = _extract_text(reports)
     dataset = parse.from_text(text)
-    for d, c in dataset['Cascais'].items():
-        print(f'{d.isoformat()}: {c}')
+    for d, c in dataset["Cascais"].items():
+        print(f"{d.isoformat()}: {c}")
 
+
+def add_concelho(sub_parser):
+    concelho_parser = sub_parser.add_parser(
+        "concelho",
+        help="interact with municipality data. (only from 2020-04-09 onwards)",
+    )
+    console_parser.set_defaults(command=command_concelho)
+    console_parser.add_argument(
+        "name", help="Municipality name.",
+    )
