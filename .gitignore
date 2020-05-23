@@ -6,3 +6,5 @@ reports/*.pdf
 dist/
 build/
 *.egg-info/
+
+secret.sh
