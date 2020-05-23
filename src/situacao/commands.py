@@ -1,5 +1,6 @@
 from yaspin import yaspin
 
+from . import data
 from . import minsaude
 from . import parse
 from . import pdf
@@ -8,6 +9,10 @@ from . import util
 
 
 def command_concelho(args):
+    if args.list:
+        for m in data.MUNICIPALITIES:
+            print(m)
+        return
     sp = yaspin()
     sp.color = 'blue'
     sp.start()
@@ -37,6 +42,9 @@ def add_concelho(sub_parser):
         help="interact with municipality data. (only from 2020-04-09 onwards)",
     )
     concelho_parser.set_defaults(command=command_concelho)
+    concelho_parser.add_argument(
+        "--list", action="store_true", help="lists available municipalities."
+    )
     concelho_parser.add_argument(
         "name", help="Municipality name.",
     )
