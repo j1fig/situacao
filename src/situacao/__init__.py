@@ -5,6 +5,7 @@ A command line tool to interact with Portugal COVID-19 data.
 import argparse
 import sys
 
+from . import cache
 from . import commands
 
 
@@ -13,6 +14,9 @@ def parse_args(argv):
     # global options.
     parser.add_argument(
         "-v", "--verbose", action="count", help="increase output verbosity"
+    )
+    parser.add_argument(
+        "--clear", action="store_true", help="clears cache."
     )
 
     sub_parser = parser.add_subparsers(dest="subcommand")
@@ -31,6 +35,8 @@ def main(argv=None):
         argv = sys.argv
     args = parse_args(argv)
     try:
+        if args.clear:
+            cache.clear()
         args.command(args)
     except KeyboardInterrupt:
         sys.exit(-1)
