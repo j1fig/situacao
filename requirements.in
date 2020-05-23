@@ -1,3 +1,4 @@
 pdftotext==2.1.4
 beautifulsoup4==4.9.1
 requests==2.23.0
+yaspin==0.17.0

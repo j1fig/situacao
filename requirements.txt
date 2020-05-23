@@ -12,3 +12,4 @@ pdftotext==2.1.4          # via -r requirements.in
 requests==2.23.0          # via -r requirements.in
 soupsieve==2.0.1          # via beautifulsoup4
 urllib3==1.25.9           # via requests
+yaspin==0.17.0            # via -r requirements.in
