@@ -5,6 +5,8 @@ A command line tool to interact with Portugal COVID-19 data.
 import argparse
 import sys
 
+from . import commands
+
 
 def parse_args(argv):
     parser = argparse.ArgumentParser(description=__doc__)

@@ -1,6 +1,6 @@
 import pytest
 
-import parse
+from situacao import parse
 
 
 @pytest.mark.parametrize(

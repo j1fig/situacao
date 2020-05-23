@@ -1,7 +1,7 @@
 import datetime
 
-import data
-import settings
+from . import data
+from . import settings
 
 
 class UnknownMunicipality(Exception):

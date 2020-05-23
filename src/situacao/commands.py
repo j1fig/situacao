@@ -5,8 +5,8 @@ from bs4 import BeautifulSoup
 import pdftotext
 import requests
 
-import parse
-import settings
+from . import parse
+from . import settings
 
 
 def _report_filename(date):
@@ -80,7 +80,7 @@ def add_concelho(sub_parser):
         "concelho",
         help="interact with municipality data. (only from 2020-04-09 onwards)",
     )
-    console_parser.set_defaults(command=command_concelho)
-    console_parser.add_argument(
+    concelho_parser.set_defaults(command=command_concelho)
+    concelho_parser.add_argument(
         "name", help="Municipality name.",
     )
