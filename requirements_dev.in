@@ -1,6 +1,6 @@
 -r requirements.in
 black==19.10b0
-ipython==7.14.0
+ipython==7.16.3
 pytest==5.4.2
 wheel==0.34.2
 twine==3.1.1
